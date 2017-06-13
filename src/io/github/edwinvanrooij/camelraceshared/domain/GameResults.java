@@ -1,9 +1,7 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by eddy
