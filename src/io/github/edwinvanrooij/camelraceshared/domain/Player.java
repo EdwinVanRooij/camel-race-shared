@@ -24,6 +24,10 @@ public class Player {
         this.id = id;
         this.name = name;
     }
+    public Player(String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     @Override
     public String toString() {
