@@ -283,7 +283,9 @@ public class Game {
 
         for (Player player : players) {
             ResultItem item = new ResultItem(player, bids.get(player.getId()));
-            results.addResultItem(item);
+            if (item.getBid() != null) {
+                results.addResultItem(item);
+            }
         }
 
         System.out.println(String.format("There's %s players in this game, game id %s, map now contains", players.size(), id));
