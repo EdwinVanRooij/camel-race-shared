@@ -16,6 +16,10 @@ public class Bid {
         this.value = value;
     }
 
+    public CardType getType() {
+        return type;
+    }
+
     @Override
     public String toString() {
         return "Bid{" +

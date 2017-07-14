@@ -18,8 +18,13 @@ public class Event {
     public static final String KEY_PLAYER_JOINED = "playerJoined";
 
     public static final String KEY_PLAYER_NEW_BID = "playerNewBid";
+    public static final String KEY_PLAYER_READY = "playerReady";
+    public static final String KEY_PLAYER_READY_SUCCESS = "playerReadySuccess";
+    public static final String KEY_PLAYER_NOT_READY = "playerNotReady";
+    public static final String KEY_PLAYER_NOT_READY_SUCCESS = "playerNotReadySuccess";
     public static final String KEY_PLAYER_BID_HANDED_IN = "playerBidHandedIn";
 
+    public static final String KEY_GAME_READY = "gameReady";
     public static final String KEY_GAME_START = "gameStart";
     public static final String KEY_GAME_STARTED_WITH_STATE = "gameStartedWithState";
     public static final String KEY_GAME_STARTED = "gameStarted";

@@ -37,6 +37,7 @@ public class Game {
 
     private String id;
     private HashMap<Integer, Bid> bids; // player ID with bids
+    private HashMap<Integer, Boolean> readyMap; // player ID with ready map
     private List<Player> players;
 
     private List<SideCard> sideCardList;
@@ -64,10 +65,32 @@ public class Game {
         setInitialState();
     }
 
+    public boolean everyoneIsReady() {
+        try {
+            for (Player player : players) {
+                System.out.println(String.format("Checking for player with id %s", player.getName()));
+                // Check if every player has a positive entry in the ready map
+                if (!readyMap.get(player.getId())) {
+                    // Player is not ready
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Player was probably not once added to the map, meaning it's never been at true
+            return false;
+        }
+        // Only if all checks were passed, everyone is really ready
+        return true;
+    }
+
     public void newBid(Player player, Bid bid) {
         bids.put(player.getId(), bid);
     }
 
+    public void ready(Player player, boolean ready) {
+        readyMap.put(player.getId(), ready);
+    }
 
     public Player addPlayer(Player player) {
         int uniqueId = nextId.incrementAndGet();
@@ -102,6 +125,7 @@ public class Game {
     private void initVariables() {
         players = new ArrayList<>();
         bids = new HashMap<>();
+        readyMap = new HashMap<>();
 
         sideCardList = new ArrayList<>();
         camelList = new ArrayList<>();
