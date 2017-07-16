@@ -1,6 +1,7 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,8 +38,9 @@ public class Game {
 
     private String id;
     private HashMap<Integer, Bid> bids; // player ID with bids
-    private HashMap<Integer, Boolean> readyMap; // player ID with ready map
-    private HashMap<Integer, Boolean> playAgainMap; // players who want to play again, true if they do
+    private transient HashMap<Integer, Boolean> readyMap; // player ID with ready map
+    private transient HashMap<Integer, Boolean> playAgainMap; // players who want to play again, true if they do
+    private transient HashMap<Player, Long> aliveCheckMap; // player with last alive check timestamp
 
     private List<Player> players;
 
@@ -57,7 +59,7 @@ public class Game {
         return id;
     }
 
-    public List<Player> getPlayers() {
+    public synchronized List<Player> getPlayers() {
         return players;
     }
 
@@ -65,6 +67,43 @@ public class Game {
         this.id = id;
         initVariables();
         setInitialState();
+
+        int interval = 5; // in seconds
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    startAliveChecker();
+                } catch (InterruptedException | NullPointerException e ) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        timer.schedule(task, 5000, interval * 1000);
+    }
+
+    /**
+     * This will delete the inactive players which are still in the game
+     *
+     * @throws InterruptedException
+     */
+    private void startAliveChecker() throws InterruptedException {
+        List<Player> playersToRemove = new ArrayList<>();
+        for (Player player : getPlayers()) {
+
+            long lastCheck = aliveCheckMap.get(player);
+            long currentTime = System.nanoTime();
+            long elapsedTimeInSeconds = (currentTime - lastCheck) / 1000000000;
+            if (elapsedTimeInSeconds > 4) {
+                playersToRemove.add(player);
+            }
+        }
+        players.removeAll(playersToRemove);
+    }
+
+    public void playerAliveCheck(Player player) {
+        aliveCheckMap.put(player, System.nanoTime());
     }
 
     public boolean everyoneIsReady() {
@@ -164,6 +203,7 @@ public class Game {
         bids = new HashMap<>();
         readyMap = new HashMap<>();
         playAgainMap = new HashMap<>();
+        aliveCheckMap = new HashMap<>();
 
         sideCardList = new ArrayList<>();
         camelList = new ArrayList<>();
