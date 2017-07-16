@@ -38,6 +38,8 @@ public class Game {
     private String id;
     private HashMap<Integer, Bid> bids; // player ID with bids
     private HashMap<Integer, Boolean> readyMap; // player ID with ready map
+    private HashMap<Integer, Boolean> playAgainMap; // players who want to play again, true if they do
+
     private List<Player> players;
 
     private List<SideCard> sideCardList;
@@ -88,6 +90,14 @@ public class Game {
         bids.put(player.getId(), bid);
     }
 
+    public Bid getBid(int playerId) {
+        try {
+            return bids.get(playerId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public void ready(Player player, boolean ready) {
         readyMap.put(player.getId(), ready);
     }
@@ -113,6 +123,8 @@ public class Game {
     public void restart() throws Exception {
         sideCardList.clear();
         camelList.clear();
+        readyMap.clear();
+        playAgainMap.clear();
         deck.clear();
         lastPickedCard = null;
         winner = null;
@@ -122,10 +134,36 @@ public class Game {
         setInitialState();
     }
 
+    public void playAgain(int playerId, boolean playAgain) {
+        playAgainMap.put(playerId, playAgain);
+    }
+
+    /**
+     * Checks if all players have signed up to play again.
+     *
+     * @return true if they all wanna play again
+     */
+    public boolean allPlayAgain() {
+        // Check for every player if the play again is at true
+        for (Player player : getPlayers()) {
+            // If the player is not in the map, or the value is not at true, not everyone wants to play again
+            try {
+                if (!playAgainMap.get(player.getId())) {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void initVariables() {
         players = new ArrayList<>();
         bids = new HashMap<>();
         readyMap = new HashMap<>();
+        playAgainMap = new HashMap<>();
 
         sideCardList = new ArrayList<>();
         camelList = new ArrayList<>();

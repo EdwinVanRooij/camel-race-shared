@@ -14,6 +14,9 @@ public class Event {
     public static final String KEY_GAME_CREATE = "gameCreate";
     public static final String KEY_GAME_CREATED = "gameCreated";
 
+    public static final String KEY_PLAY_AGAIN = "playAgain";
+    public static final String KEY_PLAY_AGAIN_SUCCESSFUL = "playAgainSuccessful";
+
     public static final String KEY_PLAYER_JOIN = "playerJoin";
     public static final String KEY_PLAYER_JOINED = "playerJoined";
 
