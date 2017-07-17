@@ -395,6 +395,10 @@ public class Game {
         return results;
     }
 
+    public Camel getWinner() {
+        return winner;
+    }
+
     public List<SideCard> getSideCardList() {
         return sideCardList;
     }
