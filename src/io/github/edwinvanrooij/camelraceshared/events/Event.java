@@ -6,8 +6,8 @@ package io.github.edwinvanrooij.camelraceshared.events;
  */
 public class Event {
     // region Basic key pair
-    public static final String KEY_EVENT_TYPE = "eventType";
-    public static final String KEY_EVENT_VALUE = "value";
+    public static final String KEY_TYPE = "eventType";
+    public static final String KEY_VALUE = "value";
     // endregion
 
     // region Event keys
@@ -35,16 +35,12 @@ public class Event {
     public static final String KEY_GAME_STARTED_WITH_STATE = "gameStartedWithState";
     public static final String KEY_GAME_STARTED = "gameStarted";
 
-    public static final String KEY_NEW_ROUND = "newRound";
-    public static final String KEY_ROUND_RESULTS = "roundResults";
-
     public static final String KEY_GET_ALL_RESULTS = "getAllResults";
     public static final String KEY_ALL_RESULTS = "allResults";
 
     public static final String KEY_GAME_OVER_PERSONAL_RESULTS = "gameOverPersonalResults";
 
     public static final String KEY_GAME_RESTART = "gameRestart";
-
 
     public static final String KEY_PICK_CARD = "pickCard";
     public static final String KEY_PICKED_CARD = "pickedCard";
@@ -71,10 +67,6 @@ public class Event {
         return eventType;
     }
 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
     public Object getValue() {
         return value;
     }
@@ -89,7 +81,6 @@ public class Event {
     }
     public Event(String eventType) {
         this.eventType = eventType;
-        this.value = value;
     }
 
     @Override

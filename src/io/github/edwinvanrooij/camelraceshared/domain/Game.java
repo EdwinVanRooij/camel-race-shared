@@ -1,7 +1,6 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -10,29 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * on 6/5/17.
  */
 public class Game {
-
-    // region Funmap
-    private static transient Map<String, String> funMap = new HashMap<>();
-
-    static {
-        funMap.put("rik", "LIMONCEEEELLLOO");
-        funMap.put("tom", "ALLAHU AKBAR");
-        funMap.put("tommeh", "ALLAHU AKBAR");
-        funMap.put("yoeri", "Bob");
-        funMap.put("bob", "Bobbeh");
-        funMap.put("fons", "Der Foenzel");
-        funMap.put("edwin", "Der Eddymeister");
-        funMap.put("lars", "Jongens mag ik een emmer?");
-        funMap.put("dennis", "Ja doe mij maar skere wodka");
-    }
-
-    private String funName(String string) {
-        if (funMap.get(string) != null) {
-            return funMap.get(string);
-        }
-        return string;
-    }
-    // endregion
 
     private static AtomicInteger nextId = new AtomicInteger();
 
@@ -55,6 +31,17 @@ public class Game {
 
     private SideCard sideCardToTurn = null;
 
+    public Camel getWinner() {
+        return winner;
+    }
+
+    public List<SideCard> getSideCardList() {
+        return sideCardList;
+    }
+
+    public List<Camel> getCamelList() {
+        return camelList;
+    }
     public String getId() {
         return id;
     }
@@ -109,7 +96,6 @@ public class Game {
     public boolean everyoneIsReady() {
         try {
             for (Player player : players) {
-                System.out.println(String.format("Checking for player with id %s", player.getName()));
                 // Check if every player has a positive entry in the ready map
                 if (!readyMap.get(player.getId())) {
                     // Player is not ready
@@ -144,19 +130,19 @@ public class Game {
     public Player addPlayer(Player player) {
         int uniqueId = nextId.incrementAndGet();
 
-        Player playerWithId = new Player(uniqueId, funName(player.getName()));
+        Player playerWithId = new Player(uniqueId, player.getName());
 
         players.add(playerWithId);
         return playerWithId;
     }
 
-    public Player getPlayer(int id) {
+    public Player getPlayer(int id) throws Exception {
         for (Player player : players) {
             if (player.getId() == id) {
                 return player;
             }
         }
-        return null;
+        throw new Exception("No player found with ID " + id);
     }
 
     public void restart() throws Exception {
@@ -381,7 +367,6 @@ public class Game {
 
     public GameResults generateGameResults() {
         GameResults results = new GameResults(winner.getCardType());
-        System.out.println("Generating game results for winner " + winner.getCardType().toString());
 
         for (Player player : players) {
             ResultItem item = new ResultItem(player, bids.get(player.getId()));
@@ -390,28 +375,7 @@ public class Game {
             }
         }
 
-        System.out.println(String.format("There's %s players in this game, game id %s, map now contains", players.size(), id));
-
         return results;
     }
 
-    public Camel getWinner() {
-        return winner;
-    }
-
-    public List<SideCard> getSideCardList() {
-        return sideCardList;
-    }
-
-    public List<Camel> getCamelList() {
-        return camelList;
-    }
-
-    public List<Card> getDeck() {
-        return deck;
-    }
-
-    public int getAmountOfCardsLeft() {
-        return deck.size();
-    }
 }
