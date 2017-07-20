@@ -96,10 +96,14 @@ public class Game {
     public boolean everyoneIsReady() {
         try {
             for (Player player : players) {
-                // Check if every player has a positive entry in the ready map
-                if (!readyMap.get(player.getId())) {
-                    // Player is not ready
-                    return false;
+                try {
+                    // Check if every player has a positive entry in the ready map
+                    if (!readyMap.get(player.getId())) {
+                        // Player is not ready
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {

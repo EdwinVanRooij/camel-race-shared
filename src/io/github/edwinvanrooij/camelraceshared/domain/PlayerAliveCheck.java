@@ -1,16 +1,14 @@
-package io.github.edwinvanrooij.camelraceshared.events;
+package io.github.edwinvanrooij.camelraceshared.domain;
 
-import io.github.edwinvanrooij.camelraceshared.domain.Bid;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
 
 /**
  * Created by eddy
  * on 6/8/17.
  */
-public class PlayerNewBid {
+public class PlayerAliveCheck {
      private String gameId;
      private Player player;
-     private Bid bid;
 
      public String getGameId() {
           return gameId;
@@ -18,14 +16,6 @@ public class PlayerNewBid {
 
      public void setGameId(String gameId) {
           this.gameId = gameId;
-     }
-
-     public Bid getBid() {
-          return bid;
-     }
-
-     public void setBid(Bid bid) {
-          this.bid = bid;
      }
 
      public Player getPlayer() {
@@ -36,10 +26,8 @@ public class PlayerNewBid {
           this.player = player;
      }
 
-
-     public PlayerNewBid(String gameId, Player player, Bid bid) {
+     public PlayerAliveCheck(String gameId, Player player) {
           this.gameId = gameId;
           this.player = player;
-          this.bid = bid;
      }
 }

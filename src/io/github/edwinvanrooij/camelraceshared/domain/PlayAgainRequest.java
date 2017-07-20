@@ -1,12 +1,13 @@
-package io.github.edwinvanrooij.camelraceshared.events;
+package io.github.edwinvanrooij.camelraceshared.domain;
 
+import io.github.edwinvanrooij.camelraceshared.domain.Bid;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
 
 /**
  * Created by eddy
  * on 6/8/17.
  */
-public class PlayerAliveCheck {
+public class PlayAgainRequest {
      private String gameId;
      private Player player;
 
@@ -26,7 +27,7 @@ public class PlayerAliveCheck {
           this.player = player;
      }
 
-     public PlayerAliveCheck(String gameId, Player player) {
+     public PlayAgainRequest(String gameId, Player player) {
           this.gameId = gameId;
           this.player = player;
      }
