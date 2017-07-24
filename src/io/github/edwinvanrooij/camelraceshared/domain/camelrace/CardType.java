@@ -1,4 +1,4 @@
-package io.github.edwinvanrooij.camelraceshared.domain;
+package io.github.edwinvanrooij.camelraceshared.domain.camelrace;
 
 /**
  * Created by eddy

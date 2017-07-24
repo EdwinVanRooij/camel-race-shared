@@ -1,5 +1,9 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Camel;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Card;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.SideCard;
+
 import java.util.List;
 
 /**

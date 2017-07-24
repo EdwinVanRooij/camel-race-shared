@@ -1,5 +1,7 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Bid;
+
 /**
  * Created by eddy
  * on 7/17/17.

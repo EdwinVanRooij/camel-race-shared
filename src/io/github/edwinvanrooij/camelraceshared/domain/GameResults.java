@@ -1,5 +1,7 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CardType;
+
 import java.util.ArrayList;
 import java.util.List;
 

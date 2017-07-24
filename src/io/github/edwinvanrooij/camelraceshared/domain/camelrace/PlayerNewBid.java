@@ -1,6 +1,6 @@
-package io.github.edwinvanrooij.camelraceshared.domain;
+package io.github.edwinvanrooij.camelraceshared.domain.camelrace;
 
-import io.github.edwinvanrooij.camelraceshared.domain.Bid;
+
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
 
 /**

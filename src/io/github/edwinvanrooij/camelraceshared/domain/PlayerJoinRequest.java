@@ -1,6 +1,5 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
-import io.github.edwinvanrooij.camelraceshared.domain.Player;
 
 /**
  * Created by eddy
