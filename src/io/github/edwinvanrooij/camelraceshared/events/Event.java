@@ -14,6 +14,9 @@ public class Event {
     public static final String KEY_PLAYER_ALIVE_CHECK = "aliveCheck";
     public static final String KEY_PLAYER_ALIVE_CHECK_CONFIRMED = "aliveCheckConfirmed";
 
+    public static final String KEY_WHICH_GAME_TYPE = "whichGame";
+    public static final String KEY_GAME_TYPE = "gameType";
+
     public static final String KEY_GAME_CREATE = "gameCreate";
     public static final String KEY_GAME_CREATED = "gameCreated";
 
