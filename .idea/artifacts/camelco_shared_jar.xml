@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="camelco-shared:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/camelco_shared_jar</output-path>
+    <root id="archive" name="camelco-shared.jar">
+      <element id="module-output" name="camelco-shared" />
+    </root>
+  </artifact>
+</component>

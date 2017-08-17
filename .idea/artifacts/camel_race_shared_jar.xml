@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="camel-race-shared:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/camel_race_shared_jar</output-path>
-    <root id="archive" name="camel-race-shared.jar">
-      <element id="module-output" name="camel-race-shared" />
-    </root>
-  </artifact>
-</component>

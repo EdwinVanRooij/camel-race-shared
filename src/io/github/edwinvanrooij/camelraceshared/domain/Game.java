@@ -56,6 +56,10 @@ public abstract class Game {
         List<Player> playersToRemove = new ArrayList<>();
         for (Player player : getPlayers()) {
 
+            if (aliveCheckMap.get(player) == null) {
+                System.out.println(String.format("Player %s does not exist in aliveCheckMap.", player));
+                return;
+            }
             long lastCheck = aliveCheckMap.get(player);
             long currentTime = System.nanoTime();
             long elapsedTimeInSeconds = (currentTime - lastCheck) / 1000000000;
