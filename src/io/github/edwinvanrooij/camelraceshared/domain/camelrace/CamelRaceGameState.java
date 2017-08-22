@@ -1,4 +1,4 @@
-package io.github.edwinvanrooij.camelraceshared.domain;
+package io.github.edwinvanrooij.camelraceshared.domain.camelrace;
 
 import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Camel;
 import io.github.edwinvanrooij.camelraceshared.domain.camelrace.Card;
@@ -10,7 +10,7 @@ import java.util.List;
  * Created by eddy
  * on 5/31/17.
  */
-public class GameState {
+public class CamelRaceGameState {
     private List<SideCard> sideCardList;
     private List<Camel> camelList;
     private List<Card> deck;
@@ -59,7 +59,7 @@ public class GameState {
         this.lastPickedCard = lastPickedCard;
     }
 
-    public GameState(List<SideCard> sideCardList, List<Camel> camelList, List<Card> deck, Card lastPickedCard, Camel winner, boolean gameEnded) {
+    public CamelRaceGameState(List<SideCard> sideCardList, List<Camel> camelList, List<Card> deck, Card lastPickedCard, Camel winner, boolean gameEnded) {
         this.sideCardList = sideCardList;
         this.camelList = camelList;
         this.deck = deck;

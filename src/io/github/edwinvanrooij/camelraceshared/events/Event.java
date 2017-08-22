@@ -28,6 +28,9 @@ public class Event {
     public static final String KEY_PLAYER_JOIN = "playerJoin";
     public static final String KEY_PLAYER_JOINED = "playerJoined";
 
+    public static final String KEY_PLAYER_GAME_MODE_VOTE = "playerGameModeVote";
+    public static final String KEY_PLAYER_GAME_MODE_VOTE_HANDED_IN = "playerGameModeVoteHandedIn";
+
     public static final String KEY_PLAYER_NEW_BID = "playerNewBid";
     public static final String KEY_PLAYER_READY = "playerReady";
     public static final String KEY_PLAYER_READY_SUCCESS = "playerReadySuccess";

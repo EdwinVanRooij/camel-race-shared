@@ -1,9 +1,8 @@
 package io.github.edwinvanrooij.camelraceshared.domain.mexican;
 
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import io.github.edwinvanrooij.camelraceshared.domain.Game;
 import io.github.edwinvanrooij.camelraceshared.domain.GameResults;
-import io.github.edwinvanrooij.camelraceshared.domain.GameState;
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGameState;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
 
 import java.util.*;
@@ -13,49 +12,12 @@ import java.util.*;
  * on 7/27/17.
  */
 
-// Voor spel:
-//
-// 2-..* players
-// 2 dices
-// 2 opties: easy/hardcore, decided by players
-//
-//
-// Worpen:
-//
-// Random speler begint met gooien
-// Aantal keer gooien hangt af van mode, normaal - 3x max, hardcore - 1x max
-// De 'pot' staat op het scherm, begint op basis van mode - normaal - 2x, hardcore - 4x
-//
-// Normale worpen:
-// enkele, 45 wordt 54
-// dubbele, 33 wordt 300
-//
-// Speciale worpen:
-// - 21 - hoogste, pot verdubbelt, klaar met beurt
-// - 31 - je bent nu drieman, je gooi telt NIET als beurt, en je mag verder gaan
-// - 11 - je bent nu honderdman, je gooi telt WEL als beurt, je mag verder proberen als je nog beurten over hebt
-//
-//
-// Spelverloop:
-//
-// - Eerste speler mag x aantal keren gooien, mag eerder stoppen dan max aantal beurten die over zijn. Wanneer deze eerder stopt, mag de rest na hem/haar een gelijk aantal beurten gooien.
-// - Wanneer er een drieman aanwezig is en er wordt een getal gegooid waar een 3 in zit, bijvoorbeeld 43, drinkt de drieman een slok.
-// - Wanneer er een honderdman aanwezig is en er wordt een honderdtal gegooid, bijvoorbeeld 300, drinkt de honderdman een slok.
-//
-// Speciale gevallen hierop:
-// - Wanneer er een nieuwe honderdman of drieman komt, vervalt de oude -man
-// METEEN, de nieuwe -man drinkt de slokken.
-//
-// Iedereen heeft gegooid? Degene die het laagste getal gegooid heeft, drinkt de huidige 'pot' in slokken op.
-//
-// Opmerkingen:
-// - Je gooit alle dobbelstenen opnieuw, of geen. Niet eentje.
-
 public class MexicanGame extends Game {
 
     private Map<Integer, Throw> playerThrowMap; // (player id, throw)
     private Map<Integer, Integer> playersThrowsLeftMap; // (player id, maxTurns)
     private Map<Integer, Integer> playersMaxThrowsMap; // (player id, turnsLeft)
+    private Map<Integer, GameMode> playerVoteMap; // (player id, gameModeVoted)
 
     private int firstPlayerId;
 
@@ -66,8 +28,6 @@ public class MexicanGame extends Game {
 
     private List<Integer> playerOrder; // player IDs
     private int playerOrderTurn;
-
-    private static Random random = new Random();
 
     public MexicanGame(String id) throws Exception {
         super(id);
@@ -80,7 +40,26 @@ public class MexicanGame extends Game {
         playerThrowMap = new HashMap<>();
         playersMaxThrowsMap = new HashMap<>();
         playersThrowsLeftMap = new HashMap<>();
+        playerVoteMap = new HashMap<>();
         firstPlayerId = 0;
+    }
+
+    public void newVote(int playerId, int enumOrdinal) throws Exception {
+        playerVoteMap.put(playerId, GameMode.values()[enumOrdinal]);
+        if (everyoneVoted()) {
+            setGameMode();
+        }
+    }
+
+    public boolean everyoneVoted() {
+        // Check if any player has NOT yet voted. If that's the case, not everybody voted.
+        for (Player p : players) {
+            if (playerVoteMap.get(p.getId()) == null) {
+                System.out.println(String.format("%s with id %s didn't vote yet", p, p.getId()));
+                return false;
+            }
+        }
+        return true;
     }
 
     public Throw newPlayerThrow(Player p) throws Exception {
@@ -110,6 +89,45 @@ public class MexicanGame extends Game {
         setModeVariables(mode);
     }
 
+    private void setGameMode() throws Exception {
+        int normalVotes = 0;
+        int hardcoreVotes = 0;
+
+        // Collect the votes
+        for (Integer name : playerVoteMap.keySet()) {
+            GameMode value = playerVoteMap.get(name);
+
+            if (value == GameMode.NORMAL) {
+                normalVotes++;
+            } else if (value == GameMode.HARDCORE) {
+                hardcoreVotes++;
+            } else {
+                throw new Exception("Could not determine what gamemode was voted for.");
+            }
+        }
+
+        // Sanity check
+        if (normalVotes == 0 && hardcoreVotes == 0) {
+            throw new Exception("Something went wrong while counting the votes. Received zero of both.");
+        }
+
+        // It's a reasonably fair vote system. Most votes wins.
+        if (normalVotes > hardcoreVotes) {
+            // Normal wins
+            gameMode = GameMode.NORMAL;
+        } else if (hardcoreVotes > normalVotes) {
+            // Hardcore wins wins
+            gameMode = GameMode.HARDCORE;
+        } else if (hardcoreVotes == normalVotes) {
+            // Tie. Means the hardcore wins, 'cause YO-LOOOO.
+            gameMode = GameMode.HARDCORE;
+        } else {
+            throw new Exception("Could not determine which gamemode to set. Votes counting was messed up.");
+        }
+
+        setModeVariables(gameMode);
+    }
+
     private void setModeVariables(GameMode mode) throws Exception {
         switch (mode) {
             case NORMAL:
@@ -123,6 +141,12 @@ public class MexicanGame extends Game {
             default:
                 throw new Exception("Could not determine what gamemode this is");
         }
+
+        for (Player p : players) {
+            playersThrowsLeftMap.put(p.getId(), maxThrows);
+            playersMaxThrowsMap.put(p.getId(), maxThrows);
+            playerThrowMap.put(p.getId(), new Throw(0, 0, 0));
+        }
     }
 
     public void generatePlayerOrder() {
@@ -131,6 +155,7 @@ public class MexicanGame extends Game {
         // Add a player to the player order
         do {
             // Get a new random index
+            Random random = new Random();
             int index = random.nextInt(players.size());
             // Get a random player from the player list
             Player p = players.get(index);
@@ -184,8 +209,6 @@ public class MexicanGame extends Game {
     }
 
     private void onFirstPlayerDoneThrowing() throws Exception {
-        System.out.println("First person done throwing");
-
         int maxThrowsOfFirstPlayer = playersMaxThrowsMap.get(firstPlayerId);
         int throwsLeftOfFirstPlayer = playersThrowsLeftMap.get(firstPlayerId);
 
@@ -235,8 +258,18 @@ public class MexicanGame extends Game {
     }
 
     @Override
-    public GameState generateGameState() {
-        return null;
+    public MexicanGameState generateGameState() {
+        List<PlayerTableRowItem> playerTableRowItems = new ArrayList<>();
+
+        for (Player p : players) {
+            PlayerTableRowItem item = new PlayerTableRowItem(
+                    p,
+                    playerThrowMap.get(p.getId()).getScore(),
+                    playersThrowsLeftMap.get(p.getId()));
+            playerTableRowItems.add(item);
+        }
+
+        return new MexicanGameState(gameMode.ordinal(), stake, playerTableRowItems);
     }
 
     @Override

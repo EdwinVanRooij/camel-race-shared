@@ -17,11 +17,17 @@ public class MexicanEmulator {
         Player bob = new Player("Bob");
         Player edwin = new Player("Edwin");
 
-        game.addPlayer(tom);
-        game.addPlayer(fons);
-        game.addPlayer(rik);
-        game.addPlayer(bob);
-        game.addPlayer(edwin);
+        tom = game.addPlayer(tom);
+        fons = game.addPlayer(fons);
+        rik = game.addPlayer(rik);
+        bob = game.addPlayer(bob);
+        edwin = game.addPlayer(edwin);
+
+        game.newVote(edwin.getId(), MexicanGame.GameMode.NORMAL.ordinal());
+        game.newVote(tom.getId(), MexicanGame.GameMode.HARDCORE.ordinal());
+        game.newVote(rik.getId(), MexicanGame.GameMode.HARDCORE.ordinal());
+        game.newVote(bob.getId(), MexicanGame.GameMode.HARDCORE.ordinal());
+        game.newVote(fons.getId(), MexicanGame.GameMode.HARDCORE.ordinal());
 
         game.setGameMode(MexicanGame.GameMode.NORMAL);
 

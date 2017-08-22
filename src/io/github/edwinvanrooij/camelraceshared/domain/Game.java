@@ -1,6 +1,8 @@
 package io.github.edwinvanrooij.camelraceshared.domain;
 
 
+import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGameState;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -159,7 +161,7 @@ public abstract class Game {
 
     protected abstract void setInitialState() throws Exception;
 
-    public abstract GameState generateGameState();
+    public abstract Object generateGameState();
 
     public abstract GameResults generateGameResults();
 }

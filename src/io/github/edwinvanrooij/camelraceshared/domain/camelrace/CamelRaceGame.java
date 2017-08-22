@@ -244,8 +244,8 @@ public class CamelRaceGame extends Game {
     }
 
     @Override
-    public GameState generateGameState() {
-        return new GameState(sideCardList, camelList, deck, lastPickedCard, winner, gameEnded);
+    public CamelRaceGameState generateGameState() {
+        return new CamelRaceGameState(sideCardList, camelList, deck, lastPickedCard, winner, gameEnded);
     }
 
     @Override
