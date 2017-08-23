@@ -43,6 +43,13 @@ public class Event {
     public static final String KEY_GAME_STARTED_WITH_STATE = "gameStartedWithState";
     public static final String KEY_GAME_STARTED = "gameStarted";
 
+    public static final String KEY_EVERYONE_VOTED = "everyoneVoted";
+
+    public static final String KEY_YOUR_TURN = "yourTurn";
+
+    public static final String KEY_NEW_THROW = "newThrow";
+    public static final String KEY_NEW_THROW_SUCCESS = "newThrowSuccess";
+
     public static final String KEY_GET_ALL_RESULTS = "getAllResults";
     public static final String KEY_ALL_RESULTS = "allResults";
 

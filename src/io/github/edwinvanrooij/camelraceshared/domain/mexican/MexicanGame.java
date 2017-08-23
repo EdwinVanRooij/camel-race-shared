@@ -48,6 +48,7 @@ public class MexicanGame extends Game {
         playerVoteMap.put(playerId, GameMode.values()[enumOrdinal]);
         if (everyoneVoted()) {
             setGameMode();
+            generatePlayerOrder();
         }
     }
 
