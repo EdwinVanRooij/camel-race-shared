@@ -1,8 +1,6 @@
 package io.github.edwinvanrooij.camelraceshared.domain.mexican;
 
 import io.github.edwinvanrooij.camelraceshared.domain.Game;
-import io.github.edwinvanrooij.camelraceshared.domain.GameResults;
-import io.github.edwinvanrooij.camelraceshared.domain.camelrace.CamelRaceGameState;
 import io.github.edwinvanrooij.camelraceshared.domain.Player;
 
 import java.util.*;
@@ -72,11 +70,37 @@ public class MexicanGame extends Game {
         Throw th = thrower.generateThrow();
         playerThrowMap.put(p.getId(), th);
 
+        // Execute code for special throws
+        switch (th.getScore()) {
+            case 21:
+                stake = stake * 2;
+                break;
+            case 31:
+                // Reset throws to amount before this turn, no turn should be used on 31.
+                playersThrowsLeftMap.put(p.getId(), throwsLeft);
+                // todo; drieman
+                break;
+            case 11:
+                // todo; honderdman
+                break;
+        }
+
         // Check if the first person is done throwing
         if (p.getId() == firstPlayerId && throwsLeft - 1 == 0) {
             onFirstPlayerDoneThrowing();
         }
         return th;
+    }
+
+    public boolean everyoneIsDone() {
+        return playerOrderTurn == playerOrder.size();
+    }
+
+    public Player getCurrentPlayerInTurn() throws Exception {
+        return getPlayer(playerOrder.get(playerOrderTurn -1));
+    }
+    public boolean playerHasThrowsLeft(Player p) {
+        return playersThrowsLeftMap.get(p.getId()) > 0;
     }
 
     public void playerStops(Player p) throws Exception {
@@ -132,7 +156,8 @@ public class MexicanGame extends Game {
     private void setModeVariables(GameMode mode) throws Exception {
         switch (mode) {
             case NORMAL:
-                maxThrows = 3;
+                maxThrows = 100;
+//                maxThrows = 3;
                 stake = 2;
                 break;
             case HARDCORE:
@@ -213,9 +238,13 @@ public class MexicanGame extends Game {
         int maxThrowsOfFirstPlayer = playersMaxThrowsMap.get(firstPlayerId);
         int throwsLeftOfFirstPlayer = playersThrowsLeftMap.get(firstPlayerId);
 
+        // First of all, player one said he's done throwing, so let's make sure of that.
+        playersThrowsLeftMap.put(firstPlayerId, 0);
+
         // If the first player only got to throw once, it's once for all
         if (maxThrowsOfFirstPlayer == 1) {
             setThrowsForOtherPlayers(1);
+            System.out.println("Setting throws for other players to 1");
             return;
         }
 
@@ -274,8 +303,46 @@ public class MexicanGame extends Game {
     }
 
     @Override
-    public GameResults generateGameResults() {
-        return null;
+    public MexicanGameResults generateGameResults() throws Exception {
+        List<PlayerResultItem> playerResultItems = new ArrayList<>();
+        for (Player p : players) {
+            playerResultItems.add(new PlayerResultItem(p, playerThrowMap.get(p.getId()).getScore()));
+        }
+        Player loser = getLoser();
+        return new MexicanGameResults(stake, loser, playerResultItems);
+    }
+
+    public Player getLoser() throws Exception {
+        Player loser = null;
+        int currentLowest = 9999; // Set initial lowest
+
+        for (Integer playerId : playerThrowMap.keySet()) {
+            int score = playerThrowMap.get(playerId).getScore();
+            if (scoreIsLowerThan(score, currentLowest)) {
+                loser = getPlayer(playerId);
+            }
+        }
+
+        return loser;
+    }
+
+    private boolean scoreIsLowerThan(int score, int currentLowest) {
+        // If score is 21, it's not the lowest
+        if (score == 21) {
+            return false;
+        }
+
+        // Simply compare integers
+        if (score < currentLowest) {
+            // Score is lower
+            return true;
+        } else if (score == currentLowest) {
+            // Score is equal, we're not specially handling equal scores for now
+            return false;
+        } else {
+            // Score is higher
+            return false;
+        }
     }
 
     public enum GameMode {

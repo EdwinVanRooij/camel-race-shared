@@ -47,6 +47,13 @@ public class Event {
 
     public static final String KEY_YOUR_TURN = "yourTurn";
 
+    public static final String KEY_NEW_GAME_THROW = "newGameThrow";
+
+    public static final String KEY_THROW_ENDED = "throwEnded";
+    public static final String KEY_PROMPT_THROW_OPTION = "promptThrowOption";
+
+    public static final String KEY_END_TURN = "endTurn";
+
     public static final String KEY_NEW_THROW = "newThrow";
     public static final String KEY_NEW_THROW_SUCCESS = "newThrowSuccess";
 

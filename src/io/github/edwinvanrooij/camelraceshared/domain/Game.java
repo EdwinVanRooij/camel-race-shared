@@ -163,5 +163,5 @@ public abstract class Game {
 
     public abstract Object generateGameState();
 
-    public abstract GameResults generateGameResults();
+    public abstract Object generateGameResults() throws Exception;
 }
