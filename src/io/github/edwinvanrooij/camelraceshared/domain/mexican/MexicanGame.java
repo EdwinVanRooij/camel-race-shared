@@ -156,8 +156,7 @@ public class MexicanGame extends Game {
     private void setModeVariables(GameMode mode) throws Exception {
         switch (mode) {
             case NORMAL:
-                maxThrows = 100;
-//                maxThrows = 3;
+                maxThrows = 3;
                 stake = 2;
                 break;
             case HARDCORE:
