@@ -319,6 +319,7 @@ public class MexicanGame extends Game {
             int score = playerThrowMap.get(playerId).getScore();
             if (scoreIsLowerThan(score, currentLowest)) {
                 loser = getPlayer(playerId);
+                currentLowest = score;
             }
         }
 
